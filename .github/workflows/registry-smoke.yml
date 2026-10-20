@@ -21,9 +21,11 @@ jobs:
           node-version: '22'
       - name: Public CLI help
         shell: bash
+        working-directory: ${{ runner.temp }}
         run: npx --yes @ade-syofyan/feature-map-pro@0.21.0-pro.2 --help
       - name: Public engine must reject missing licenses
         shell: bash
+        working-directory: ${{ runner.temp }}
         run: |
           set +e
           npx --yes @ade-syofyan/feature-map-pro@0.21.0-pro.2 license status > status.txt 2>&1
