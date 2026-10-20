@@ -16,7 +16,7 @@
     "assets/"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=18.20.8"
   },
   "scripts": {
     "test": "node --test test/installer.test.mjs"

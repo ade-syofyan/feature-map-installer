@@ -17,7 +17,7 @@ Setelah aktif, buka sesi agent baru. Status: `npx @ade-syofyan/feature-map-pro@l
 
 Platform yang tersedia tercantum di release.json: macOS Apple Silicon, Windows x64,
 dan Linux x64 (glibc, Ubuntu 22.04 atau lebih baru). Windows ARM, Linux ARM dan
-Alpine/musl dan Mac Intel belum didukung. Windows memakai tar bawaan Windows 10/11. Node 20+, tar, Git, serta Python 3
+Alpine/musl dan Mac Intel belum didukung. Windows memakai tar bawaan Windows 10/11. Node 18.20.8+, tar, Git, serta Python 3
 untuk hook/core Free diperlukan. Installer memasang skill Codex; `--activate-only`
 mengaktifkan tanpa memasang skill. Plugin Claude Code dapat dipasang manual dari
 folder paket melalui pengelola plugin, dengan satu sumber feature-map aktif.
