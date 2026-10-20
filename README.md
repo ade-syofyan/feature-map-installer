@@ -32,3 +32,9 @@ Versi 0.22.0-pro.1 menambahkan Riwayat Aturan, Bekal Tugas dan Lanjut Tugas.
 Agent membaca aturan sebelum edit dan memeriksa kembali kebijakan/bukti usang
 ketika melanjutkan tugas. Review tetap wajib; laporan bukan pengunci editor atau
 jaminan semua konflik kebijakan terdeteksi. Jalankan command --help untuk opsi.
+
+Versi 0.23.0-pro.1 memakai lisensi FMP2. Kode lisensi tidak memuat email asli;
+email dimasukkan terpisah dan diperiksa dengan Argon2id serta tanda tangan Ed25519.
+FMP1 tidak diterima. Minta penerbitan ulang lewat operator sebelum memperbarui.
+Email yang sudah diketahui masih bisa dicoba secara offline; format ini tidak
+menjamin email mustahil ditebak. Binary lama tetap menerima FMP1 sampai diperbarui.
