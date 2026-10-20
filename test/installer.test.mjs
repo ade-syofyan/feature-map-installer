@@ -100,3 +100,13 @@ test('Windows tar CRLF listing is accepted while embedded carriage returns are r
  assert.equal(validateArchiveNames('feature-map-pro/\r\nfeature-map-pro/runtime/engine/feature-map-engine.exe\r\n'),true);
  assert.throws(()=>validateArchiveNames('feature-map-pro/a\rhidden\r\n'),/arsip/i);
 });
+
+test('Windows extraction selects the system tar rather than a Git Bash PATH wrapper',async()=>{
+ const {tarExecutable}=await import('../lib/installer.mjs');
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fm-system-tar-'));
+ try {
+  const executable=path.join(temp,'System32','tar.exe');fs.mkdirSync(path.dirname(executable));fs.writeFileSync(executable,'native tar fixture');
+  assert.equal(tarExecutable('win32',temp),executable);
+  assert.throws(()=>tarExecutable('win32',path.join(temp,'absent')),/tar/i);
+ } finally {fs.rmSync(temp,{recursive:true,force:true});}
+});
