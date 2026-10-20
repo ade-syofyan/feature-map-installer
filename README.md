@@ -22,10 +22,9 @@ untuk hook/core Free diperlukan. Installer memasang skill Codex; `--activate-onl
 mengaktifkan tanpa memasang skill. Plugin Claude Code dapat dipasang manual dari
 folder paket melalui pengelola plugin, dengan satu sumber feature-map aktif.
 
-Lisensi diverifikasi offline sebelum instalasi skill dan setiap command premium.
+Aktivasi memerlukan email pembelian dan kode lisensi yang sesuai.
 Instalasi lama disalin ke folder backup di luar folder skills. Core Free tetap MIT.
-Kompilasi mempersulit pembacaan source; bukan jaminan anti-reverse-engineering
-atau pencegahan penyalinan binary. Pembelian/harga: ade.syofyan@gmail.com.
+Untuk pembelian dan bantuan aktivasi, hubungi ade.syofyan@gmail.com.
 
 
 Versi 0.22.0-pro.1 menambahkan Riwayat Aturan, Bekal Tugas dan Lanjut Tugas.
@@ -33,8 +32,5 @@ Agent membaca aturan sebelum edit dan memeriksa kembali kebijakan/bukti usang
 ketika melanjutkan tugas. Review tetap wajib; laporan bukan pengunci editor atau
 jaminan semua konflik kebijakan terdeteksi. Jalankan command --help untuk opsi.
 
-Versi 0.23.0-pro.1 memakai lisensi FMP2. Kode lisensi tidak memuat email asli;
-email dimasukkan terpisah dan diperiksa dengan Argon2id serta tanda tangan Ed25519.
-FMP1 tidak diterima. Minta penerbitan ulang lewat operator sebelum memperbarui.
-Email yang sudah diketahui masih bisa dicoba secara offline; format ini tidak
-menjamin email mustahil ditebak. Binary lama tetap menerima FMP1 sampai diperbarui.
+Untuk memperbarui dari versi sebelum 0.23, hubungi penerbit terlebih dahulu
+untuk mendapatkan kode lisensi yang sesuai. Jangan bagikan kode lisensi Anda.
