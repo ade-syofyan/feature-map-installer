@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": "0.21.0-pro.3",
+  "version": "0.21.0-pro.4",
   "artifacts": {
     "darwin-arm64": {
       "sha256": "fa90315978ee367eb169fb885d360d8e9830769752105e050eb7f95ac49b5a7d",

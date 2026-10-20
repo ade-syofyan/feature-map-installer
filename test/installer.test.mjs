@@ -110,3 +110,87 @@ test('Windows extraction selects the system tar rather than a Git Bash PATH wrap
   assert.throws(()=>tarExecutable('win32',path.join(temp,'absent')),/tar/i);
  } finally {fs.rmSync(temp,{recursive:true,force:true});}
 });
+
+import {PassThrough,Writable} from 'node:stream';
+function promptTerminal() {
+ const input=new PassThrough();input.isTTY=true;input.isRaw=false;
+ input.setRawMode=value=>{input.isRaw=value;};
+ let text='';const output=new Writable({write(chunk,encoding,done){text+=chunk.toString();done();}});output.isTTY=true;
+ return {input,output,text:()=>text};
+}
+test('license typing and bracketed paste show masked count without revealing the token',async()=>{
+ const {readLicense}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ const result=readLicense(terminal);
+ terminal.input.write('FMP1.');
+ assert.match(terminal.text(),/••••• \(5 karakter\)/);
+ terminal.input.write('\x1b[200~synthetic\ncode\x1b[201~');
+ assert.match(terminal.text(),/18 karakter/);
+ terminal.input.write('\x7f');terminal.input.write('\r');
+ assert.equal(await result,'FMP1.syntheticcod');
+ assert.equal(terminal.input.isRaw,false);
+ assert.ok(!terminal.text().includes('FMP1.'));assert.ok(!terminal.text().includes('synthetic'));
+});
+test('empty submit stays in prompt and Ctrl U clears before a new paste',async()=>{
+ const {readLicense}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ const result=readLicense(terminal);terminal.input.write('\r');
+ assert.match(terminal.text(),/Masukkan kode lisensi/);assert.equal(terminal.input.isRaw,true);
+ terminal.input.write('wrong\x15valid\r');assert.equal(await result,'valid');
+ assert.match(terminal.text(),/0 karakter/);
+});
+test('cancel and EOF restore terminal without exposing typed licenses',async()=>{
+ const {readLicense}=await import('../lib/prompts.mjs');
+ for(const end of ['cancel','eof']) {
+  const terminal=promptTerminal();const result=readLicense(terminal);
+  terminal.input.write('private-token');
+  if(end==='cancel')terminal.input.write('\x03');else terminal.input.end();
+  await assert.rejects(result,/dibatalkan|terputus/i);
+  assert.equal(terminal.input.isRaw,false);assert.equal(terminal.input.listenerCount('keypress'),0);
+  assert.ok(!terminal.text().includes('private-token'));
+ }
+});
+test('interactive activation pipes the license to the unchanged verifier without argv secrets',async()=>{
+ const {activateWithPrompt}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ let invocation;const result=activateWithPrompt('payload',['--email','buyer@example.com'],{...terminal,run:(root,args,options)=>{invocation={root,args,options};return {status:2};}});
+ terminal.input.write('synthetic-token\r');
+ assert.equal((await result).status,2);
+ assert.deepEqual(invocation.args,['license','activate','--email','buyer@example.com']);
+ assert.equal(invocation.options.input,'synthetic-token\n');
+ assert.deepEqual(invocation.options.stdio,['pipe','inherit','inherit']);
+ assert.match(terminal.text(),/Memeriksa lisensi/);
+ assert.ok(!JSON.stringify(invocation.args).includes('synthetic-token'));
+});
+test('file and non-TTY activation preserve the existing engine input path',async()=>{
+ const {activateWithPrompt}=await import('../lib/prompts.mjs');
+ for(const args of [[],['--file','buyer.license']]) {
+  const input={isTTY:args.length>0};let invocation;
+  await activateWithPrompt('payload',args,{input,output:{isTTY:true},run:(...values)=>{invocation=values;return {status:0};}});
+  assert.deepEqual(invocation,['payload',['license','activate',...args]]);
+ }
+});
+
+test('email prompt can be cancelled without starting activation or leaving raw mode', {timeout:2000},async()=>{
+ const {activateWithPrompt}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ let started=false;const result=activateWithPrompt('payload',[],{...terminal,run:()=>{started=true;}});
+ terminal.input.write('\x03');
+ await assert.rejects(result,/dibatalkan/);assert.equal(started,false);assert.equal(terminal.input.isRaw,false);
+});
+test('long pasted licenses keep one bounded row and retain their full length',async()=>{
+ const {readLicense}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ const token='X'.repeat(500);const result=readLicense(terminal);terminal.input.write('\x1b[200~'+token+'\x1b[201~');
+ const last=terminal.text().split('\r').at(-1);assert.match(last,/500 karakter/);assert.equal((last.match(/•/g)||[]).length,20);
+ terminal.input.write('\r');assert.equal(await result,token);
+});
+
+test('email EOF settles activation and restores terminal', {timeout:2000},async()=>{
+ const {activateWithPrompt}=await import('../lib/prompts.mjs');const terminal=promptTerminal();
+ const result=activateWithPrompt('payload',[],{...terminal,run:()=>assert.fail('must not activate')});
+ terminal.input.end();await assert.rejects(result,/email terputus/);assert.equal(terminal.input.isRaw,false);
+});
+test('email then pasted license reaches verifier with both values intact', {timeout:2000},async()=>{
+ const {activateWithPrompt}=await import('../lib/prompts.mjs');const terminal=promptTerminal();let invocation;
+ const result=activateWithPrompt('payload',[],{...terminal,run:(root,args,options)=>{invocation={args,options};return {status:2};}});
+ terminal.input.write('buyer@example.com\r');await new Promise(resolve=>setImmediate(resolve));
+ terminal.input.write('synthetic-license\r');await result;
+ assert.deepEqual(invocation.args,['license','activate','--email','buyer@example.com']);
+ assert.equal(invocation.options.input,'synthetic-license\n');assert.equal(terminal.input.isRaw,false);
+});

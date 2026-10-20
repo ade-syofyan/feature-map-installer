@@ -7,7 +7,9 @@ Source mesin Pro tidak termasuk dalam paket npm; binary diunduh dari rilis resmi
 npx @ade-syofyan/feature-map-pro@preview install
 ```
 
-Masukkan email pembelian dan kode lisensi dari Ade Syofyan. Anda juga bisa memakai
+Masukkan email pembelian dan kode lisensi dari Ade Syofyan. Saat mengetik atau paste,
+kode disamarkan dengan titik dan jumlah karakter. Tekan Enter untuk memeriksa lisensi;
+Ctrl+U menghapus input dan Ctrl+C membatalkan. Anda juga bisa memakai
 `--license-file /path/to/buyer.license`. Jangan memasukkan kode ke argumen command.
 Setelah aktif, buka sesi agent baru. Status: `npx @ade-syofyan/feature-map-pro@preview license status`.
 
