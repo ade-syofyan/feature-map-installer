@@ -1,0 +1,33 @@
+{
+  "name": "@ade-syofyan/feature-map-pro",
+  "version": "0.21.0-pro.1",
+  "description": "Installer and launcher for licensed Feature Map Pro",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "feature-map-pro": "bin/feature-map-pro.mjs"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "release.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "author": "Ade Syofyan <ade.syofyan@gmail.com>",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "access": "public",
+    "tag": "preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ade-syofyan/feature-map-installer.git"
+  }
+}

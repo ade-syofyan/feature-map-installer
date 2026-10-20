@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "version": "0.21.0-pro.1",
+  "artifacts": {
+    "darwin-arm64": {
+      "sha256": "5e085062ed806199dede8fc6c1fe522d4957439d1760693139d7823239f6bd66",
+      "engine_sha256": "d5ec8f011975718bedaf1c7ff6368b13d1500210566c966da87e47f2d887b942",
+      "size": 14049315,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.21.0-pro.1/feature-map-pro-0.21.0-pro.1-darwin-arm64.tar.gz"
+    }
+  }
+}
