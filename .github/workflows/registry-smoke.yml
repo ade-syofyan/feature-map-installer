@@ -11,9 +11,9 @@ jobs:
         os: [windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14]
     runs-on: ${{ matrix.os }}
     env:
-      FM_PRO_LICENSE_DIR: ${{ runner.temp }}/feature-map-registry-smoke/license
-      CODEX_HOME: ${{ runner.temp }}/feature-map-registry-smoke/codex
-      FEATURE_MAP_PRO_HOME: ${{ runner.temp }}/feature-map-registry-smoke/cache
+      FM_PRO_LICENSE_DIR: ${{ github.workspace }}/.registry-smoke/license
+      CODEX_HOME: ${{ github.workspace }}/.registry-smoke/codex
+      FEATURE_MAP_PRO_HOME: ${{ github.workspace }}/.registry-smoke/cache
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
