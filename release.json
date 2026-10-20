@@ -1,12 +1,24 @@
 {
   "schema_version": 1,
-  "version": "0.21.0-pro.1",
+  "version": "0.21.0-pro.2",
   "artifacts": {
     "darwin-arm64": {
-      "sha256": "5e085062ed806199dede8fc6c1fe522d4957439d1760693139d7823239f6bd66",
-      "engine_sha256": "d5ec8f011975718bedaf1c7ff6368b13d1500210566c966da87e47f2d887b942",
-      "size": 14049315,
-      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.21.0-pro.1/feature-map-pro-0.21.0-pro.1-darwin-arm64.tar.gz"
+      "sha256": "fa90315978ee367eb169fb885d360d8e9830769752105e050eb7f95ac49b5a7d",
+      "engine_sha256": "189d9b537742f508de6bc2a296245a19d9422e91ce56edf7c55a9fee033266df",
+      "size": 14320567,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.21.0-pro.2/feature-map-pro-0.21.0-pro.2-darwin-arm64.tar.gz"
+    },
+    "linux-x64": {
+      "sha256": "39bf4a0c239c0de291c27c7d7e684fef795f2de5e855072bc46868f2832c7ba4",
+      "engine_sha256": "5da00bbd833bc15c3ad0d98017e0a7127df861ac446455768b23b2950f7fee1a",
+      "size": 18223616,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.21.0-pro.2/feature-map-pro-0.21.0-pro.2-linux-x64.tar.gz"
+    },
+    "win32-x64": {
+      "sha256": "948db51f8583753b68dd64d92db4f333601f4c51f9585e8924e2ab71f75c1ca0",
+      "engine_sha256": "9a4c4cb6cbe767eb02b9afa9a5e2425194ac6de6f2f593bd716ad53f87424ece",
+      "size": 11664438,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.21.0-pro.2/feature-map-pro-0.21.0-pro.2-win32-x64.tar.gz"
     }
   }
 }

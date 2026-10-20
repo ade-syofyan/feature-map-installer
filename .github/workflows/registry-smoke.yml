@@ -1,0 +1,35 @@
+name: Registry smoke
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    env:
+      FM_PRO_LICENSE_DIR: ${{ runner.temp }}/feature-map-registry-smoke/license
+      CODEX_HOME: ${{ runner.temp }}/feature-map-registry-smoke/codex
+      FEATURE_MAP_PRO_HOME: ${{ runner.temp }}/feature-map-registry-smoke/cache
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Public CLI help
+        shell: bash
+        run: npx --yes @ade-syofyan/feature-map-pro@0.21.0-pro.2 --help
+      - name: Public engine must reject missing licenses
+        shell: bash
+        run: |
+          set +e
+          npx --yes @ade-syofyan/feature-map-pro@0.21.0-pro.2 license status > status.txt 2>&1
+          result=$?
+          set -e
+          cat status.txt
+          test "$result" -eq 2
+          grep -q 'Pro belum aktif' status.txt
+          node -e "const fs=require('fs'),path=require('path');if(fs.existsSync(path.join(process.env.CODEX_HOME,'skills')))process.exit(1)"

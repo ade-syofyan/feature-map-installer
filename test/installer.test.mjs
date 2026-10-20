@@ -43,15 +43,16 @@ test('verified archive is extracted once and altered cached engine is rejected',
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fm-installer-test-'));
  try {
   const payload=path.join(temp,'fixture/feature-map-pro/runtime/engine');fs.mkdirSync(payload,{recursive:true});
-  const engine=Buffer.from('#!/bin/sh\nexit 0\n');fs.writeFileSync(path.join(payload,'feature-map-engine'),engine,{mode:0o755});
+  const executable=process.platform==='win32'?'feature-map-engine.exe':'feature-map-engine';
+  const engine=Buffer.from('#!/bin/sh\nexit 0\n');fs.writeFileSync(path.join(payload,executable),engine,{mode:0o755});
   const archive=path.join(temp,'fixture.tar.gz');
   assert.equal(spawnSync('tar',['-czf',archive,'-C',path.join(temp,'fixture'),'feature-map-pro']).status,0);
   const data=fs.readFileSync(archive);const hash=value=>createHash('sha256').update(value).digest('hex');
   const release={...manifest,artifacts:{[`${process.platform}-${process.arch}`]:{...entry,size:data.length,sha256:hash(data),engine_sha256:hash(engine)}}};
   let fetched=0;const options={home:path.join(temp,'cache'),fetchArtifact:async()=>{fetched++;return data;}};
-  const root=await ensurePayload(release,options);assert.ok(fs.existsSync(path.join(root,'runtime/engine/feature-map-engine')));
+  const root=await ensurePayload(release,options);assert.ok(fs.existsSync(path.join(root,'runtime/engine',executable)));
   assert.equal(await ensurePayload(release,options),root);assert.equal(fetched,1);
-  fs.writeFileSync(path.join(root,'runtime/engine/feature-map-engine'),'tampered');
+  fs.writeFileSync(path.join(root,'runtime/engine',executable),'tampered');
   await ensurePayload(release,options);assert.equal(fetched,2);
  } finally {fs.rmSync(temp,{recursive:true,force:true});}
 });
@@ -79,4 +80,23 @@ test('incomplete new skills never replace an existing Free installation',()=>{
   assert.throws(()=>installSkills(root,home),/lengkap/i);
   assert.equal(fs.readFileSync(path.join(core,'SKILL.md'),'utf8'),'keep Free');
  } finally {fs.rmSync(temp,{recursive:true,force:true});}
+});
+
+test('Windows payload verifies its exe instead of requiring a Unix executable',async()=>{
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fm-win-exe-'));
+ try {
+  const folder=path.join(temp,'fixture/feature-map-pro/runtime/engine');fs.mkdirSync(folder,{recursive:true});
+  const engine=Buffer.from('synthetic PE fixture');fs.writeFileSync(path.join(folder,'feature-map-engine.exe'),engine);
+  const archive=path.join(temp,'fixture.tar.gz');
+  assert.equal(spawnSync('tar',['-czf',archive,'-C',path.join(temp,'fixture'),'feature-map-pro']).status,0);
+  const data=fs.readFileSync(archive);const hash=value=>createHash('sha256').update(value).digest('hex');
+  const release={...manifest,artifacts:{'win32-x64':{...entry,size:data.length,sha256:hash(data),engine_sha256:hash(engine)}}};
+  const root=await ensurePayload(release,{platform:'win32',arch:'x64',home:path.join(temp,'cache'),fetchArtifact:async()=>data});
+  assert.equal(fs.readFileSync(path.join(root,'runtime/engine/feature-map-engine.exe'),'utf8'),'synthetic PE fixture');
+ } finally {fs.rmSync(temp,{recursive:true,force:true});}
+});
+
+test('Windows tar CRLF listing is accepted while embedded carriage returns are rejected',()=>{
+ assert.equal(validateArchiveNames('feature-map-pro/\r\nfeature-map-pro/runtime/engine/feature-map-engine.exe\r\n'),true);
+ assert.throws(()=>validateArchiveNames('feature-map-pro/a\rhidden\r\n'),/arsip/i);
 });

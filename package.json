@@ -1,6 +1,6 @@
 {
   "name": "@ade-syofyan/feature-map-pro",
-  "version": "0.21.0-pro.1",
+  "version": "0.21.0-pro.2",
   "description": "Installer and launcher for licensed Feature Map Pro",
   "private": false,
   "type": "module",
@@ -21,7 +21,7 @@
     "test": "node --test test/*.test.mjs"
   },
   "author": "Ade Syofyan <ade.syofyan@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "publishConfig": {
     "access": "public",
     "tag": "preview"
