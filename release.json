@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
-  "version": "0.23.0-pro.2",
+  "version": "0.24.0-pro.1",
   "artifacts": {
     "darwin-arm64": {
-      "sha256": "18936eb46062d7814c63c5f75570eda8d254d5614020aaf50586d9e498eb13e6",
-      "engine_sha256": "2804859bd21cf204508c9ac33c1ccb70632e9e48865b5faa3b1ce1a2d533ff31",
-      "size": 15530684,
-      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.23.0-pro.1/feature-map-pro-0.23.0-pro.1-darwin-arm64.tar.gz"
+      "sha256": "ffaa38425a3ebc8499262b271e5cce0508aaf4375b97a4f2838501d92aa28970",
+      "engine_sha256": "f94f357dd3a6a42ca70a5c47835ab9305c0f15d5ee3f64db350a1437f6f0a18e",
+      "size": 15544992,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.24.0-pro.1/feature-map-pro-0.24.0-pro.1-darwin-arm64.tar.gz"
     },
     "linux-x64": {
-      "sha256": "6ae42599189576601896dc0fa88512b18591219895b06bef66031bfd2d165318",
-      "engine_sha256": "5002323265d82322b96e60800a26d84fa347712708ee75b0e6a2bc0bfe534566",
-      "size": 19480506,
-      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.23.0-pro.1/feature-map-pro-0.23.0-pro.1-linux-x64.tar.gz"
+      "sha256": "75f65c821116addc3dce895984a78881ad0e61b89a7f98b97f3566fdaadab1e3",
+      "engine_sha256": "42476ec52f100df061bf0711472bd3173ab8d1133bf7b627895c0bf31b006b45",
+      "size": 19497308,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.24.0-pro.1/feature-map-pro-0.24.0-pro.1-linux-x64.tar.gz"
     },
     "win32-x64": {
-      "sha256": "6e3da0ac2057e925bcf3fa52d11df9c610b5e578865906235da780f2f618676f",
-      "engine_sha256": "5d317cf4487affd42b82e5dfc6c36714f7f3d605755c206feb15ea948ba9380c",
-      "size": 12857937,
-      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.23.0-pro.1/feature-map-pro-0.23.0-pro.1-win32-x64.tar.gz"
+      "sha256": "b2c61f42220a6d5e21daad8530c892d2389dcc5d178717f4c8165eacefd9fbb5",
+      "engine_sha256": "a2a4062e4d5cd8b60a4fe9cf6e801582d66405e4e29a8380c8e7ed77db8eb0dd",
+      "size": 12869339,
+      "url": "https://github.com/ade-syofyan/feature-map-installer/releases/download/v0.24.0-pro.1/feature-map-pro-0.24.0-pro.1-win32-x64.tar.gz"
     }
   }
 }
