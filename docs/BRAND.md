@@ -17,8 +17,10 @@ Pertahankan rasio 1:1, transparansi, ruang tepi, dan warna. Jangan merentangkan 
 
 ## Pemakaian
 
-README memakai logo bersama pada ukuran 112 px. Banner Free mempertahankan layout
-lama dengan thumbnail logo yang ditanam di SVG agar tidak bergantung URL eksternal.
+README memakai banner berslogan dengan thumbnail logo yang ditanam di SVG agar
+tidak bergantung URL eksternal. Logo persegi tidak diulang di atas banner.
+Aset desktop dan mobile berada di `assets/brand/readme-banner*.svg`; keduanya
+memakai palet dan sumber logo yang sama tanpa merentangkan ikon.
 Aplikasi operator memakai PNG pada sidebar dan ICNS multiukuran yang dirender dari
 PNG yang sama. Ikon kunci tetap boleh dipakai untuk tindakan khusus pengelolaan kunci,
 bukan sebagai identitas aplikasi.
