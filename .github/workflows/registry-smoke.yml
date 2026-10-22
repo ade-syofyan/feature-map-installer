@@ -10,6 +10,7 @@ permissions:
   contents: read
 jobs:
   smoke:
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -17,6 +18,9 @@ jobs:
         node: ['18.20.8', '22']
     runs-on: ${{ matrix.os }}
     env:
+      # The bootstrap has no dependencies; test the pinned tarball without an unrelated audit request.
+      NPM_CONFIG_AUDIT: 'false'
+      NPM_CONFIG_CACHE: ${{ runner.temp }}/feature-map-npm-smoke
       INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.25.0-pro.1"
       FM_PRO_LICENSE_DIR: ${{ github.workspace }}/.registry-smoke/license
       CODEX_HOME: ${{ github.workspace }}/.registry-smoke/codex
