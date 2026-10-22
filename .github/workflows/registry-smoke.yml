@@ -17,7 +17,7 @@ jobs:
         node: ['18.20.8', '22']
     runs-on: ${{ matrix.os }}
     env:
-      INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.24.0-pro.1"
+      INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.25.0-pro.1"
       FM_PRO_LICENSE_DIR: ${{ github.workspace }}/.registry-smoke/license
       CODEX_HOME: ${{ github.workspace }}/.registry-smoke/codex
       FEATURE_MAP_PRO_HOME: ${{ github.workspace }}/.registry-smoke/cache
@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
-          echo "INSTALLER_SPEC=$RUNNER_TEMP/ade-syofyan-feature-map-pro-0.24.0-pro.1.tgz" >> "$GITHUB_ENV"
+          echo "INSTALLER_SPEC=$RUNNER_TEMP/ade-syofyan-feature-map-pro-0.25.0-pro.1.tgz" >> "$GITHUB_ENV"
       - name: Public CLI help
         shell: bash
         working-directory: ${{ runner.temp }}
@@ -43,6 +43,11 @@ jobs:
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro rule-record --help
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro task-brief --help
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro task-resume --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro registry-migrate --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro registry-read --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro registry-update --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro flow-find --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro flow-context --help
       - name: Public engine must reject missing licenses
         shell: bash
         working-directory: ${{ runner.temp }}
