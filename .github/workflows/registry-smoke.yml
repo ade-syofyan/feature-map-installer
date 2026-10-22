@@ -20,7 +20,7 @@ jobs:
     env:
       # The bootstrap has no dependencies; test the pinned tarball without an unrelated audit request.
       NPM_CONFIG_AUDIT: 'false'
-      NPM_CONFIG_CACHE: ${{ runner.temp }}/feature-map-npm-smoke
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.registry-smoke/npm-cache
       INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.25.0-pro.1"
       FM_PRO_LICENSE_DIR: ${{ github.workspace }}/.registry-smoke/license
       CODEX_HOME: ${{ github.workspace }}/.registry-smoke/codex
