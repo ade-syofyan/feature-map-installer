@@ -194,3 +194,58 @@ test('email then pasted license reaches verifier with both values intact', {time
  assert.deepEqual(invocation.args,['license','activate','--email','buyer@example.com']);
  assert.equal(invocation.options.input,'synthetic-license\n');assert.equal(terminal.input.isRaw,false);
 });
+
+test('Codex hooks preserve other integrations, upgrade once, and reject malformed config before skills change',()=>{
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fm-hooks-'));
+ try {
+  const root=path.join(temp,'payload'),home=path.join(temp,'codex');
+  for(const name of ['feature-map','feature-map-pro']) {
+   fs.mkdirSync(path.join(root,'codex-skill',name),{recursive:true});
+   fs.writeFileSync(path.join(root,'codex-skill',name,'SKILL.md'),'skill');
+  }
+  fs.mkdirSync(path.join(root,'hooks'),{recursive:true});
+  fs.writeFileSync(path.join(root,'hooks','feature_map_pre_edit.py'),'# hook');
+  fs.mkdirSync(home,{recursive:true});
+  const foreign={matcher:'Bash',hooks:[{type:'command',command:'rtk hook codex'}]};
+  fs.writeFileSync(path.join(home,'hooks.json'),JSON.stringify({hooks:{PreToolUse:[foreign]},custom:'retained'}));
+  installSkills(root,home);
+  let config=JSON.parse(fs.readFileSync(path.join(home,'hooks.json'),'utf8'));
+  assert.deepEqual(config.hooks.PreToolUse[0],foreign);
+  assert.equal(config.custom,'retained');
+  assert.equal(config.hooks.PreToolUse.length,2);
+  assert.equal(config.hooks.PreToolUse[1].hooks[0].additionalContextLimit,0);
+  assert.match(config.hooks.PreToolUse[1].hooks[0].command,/feature_map_pre_edit\.py.*--client codex/);
+  assert.ok(config.hooks.PreCompact.length);
+  installSkills(root,home);
+  config=JSON.parse(fs.readFileSync(path.join(home,'hooks.json'),'utf8'));
+  assert.equal(config.hooks.PreToolUse.length,2);
+  fs.writeFileSync(path.join(home,'skills','feature-map','SKILL.md'),'preserve');
+  fs.writeFileSync(path.join(home,'hooks.json'),'{broken');
+  assert.throws(()=>installSkills(root,home));
+  assert.equal(fs.readFileSync(path.join(home,'skills','feature-map','SKILL.md'),'utf8'),'preserve');
+ } finally {fs.rmSync(temp,{recursive:true,force:true});}
+});
+
+test('concurrent hook changes abort installation and preserve the new foreign configuration',()=>{
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'fm-hook-race-'));
+ const rename=fs.renameSync;
+ try {
+  const root=path.join(temp,'payload'),home=path.join(temp,'codex'),file=path.join(home,'hooks.json');
+  for(const name of ['feature-map','feature-map-pro']) {
+   fs.mkdirSync(path.join(root,'codex-skill',name),{recursive:true});
+   fs.writeFileSync(path.join(root,'codex-skill',name,'SKILL.md'),'new');
+   fs.mkdirSync(path.join(home,'skills',name),{recursive:true});
+   fs.writeFileSync(path.join(home,'skills',name,'SKILL.md'),'old');
+  }
+  fs.mkdirSync(path.join(root,'hooks'),{recursive:true});fs.writeFileSync(path.join(root,'hooks/feature_map_pre_edit.py'),'# hook');
+  fs.writeFileSync(file,'{}');
+  let changed=false;
+  fs.renameSync=(from,to)=>{
+   rename(from,to);
+   if(!changed&&String(from).includes('feature-map-stage')) {changed=true;fs.writeFileSync(file,'{"external":true}');}
+  };
+  assert.throws(()=>installSkills(root,home),/berubah/);
+  assert.deepEqual(JSON.parse(fs.readFileSync(file,'utf8')),{external:true});
+  assert.equal(fs.readFileSync(path.join(home,'skills/feature-map/SKILL.md'),'utf8'),'old');
+ } finally {fs.renameSync=rename;fs.rmSync(temp,{recursive:true,force:true});}
+});
