@@ -21,7 +21,7 @@ jobs:
       # The bootstrap has no dependencies; test the pinned tarball without an unrelated audit request.
       NPM_CONFIG_AUDIT: 'false'
       NPM_CONFIG_CACHE: ${{ github.workspace }}/.registry-smoke/npm-cache
-      INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.27.0-pro.1"
+      INSTALLER_SPEC: "@ade-syofyan/feature-map-pro@0.28.0-pro.1"
       FM_PRO_LICENSE_DIR: ${{ github.workspace }}/.registry-smoke/license
       CODEX_HOME: ${{ github.workspace }}/.registry-smoke/codex
       FEATURE_MAP_PRO_HOME: ${{ github.workspace }}/.registry-smoke/cache
@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
-          echo "INSTALLER_SPEC=$RUNNER_TEMP/ade-syofyan-feature-map-pro-0.27.0-pro.1.tgz" >> "$GITHUB_ENV"
+          echo "INSTALLER_SPEC=$RUNNER_TEMP/ade-syofyan-feature-map-pro-0.28.0-pro.1.tgz" >> "$GITHUB_ENV"
       - name: Public CLI help
         shell: bash
         working-directory: ${{ runner.temp }}
@@ -55,6 +55,7 @@ jobs:
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro flow-find --help
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro flow-context --help
           npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro pre-edit --help
+          npx --yes --package="$INSTALLER_SPEC" -- feature-map-pro rule-scope --help
       - name: Inactive Pro hook keeps Free editing available
         shell: bash
         working-directory: ${{ runner.temp }}
